@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+<script type="text/javascript" src="https://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script></head>
+<body>
+	<table></table>
+
+	<script type="text/javascript">
+    //document.cookie='one=1';
+    //document.cookie='two=2';
+    //document.cookie='three=3';
+    //document.cookie = "one=1; two=2; three=3"
+    //Почему-то не получилось document.cookie = "one=1; two=2; three=3"
+    var date = new Date(new Date().getTime() + 60 * 1000);
+    document.cookie = "one=1; path=/; expires=" + date.toUTCString();
+    document.cookie = "two=2; path=/; expires=" + date.toUTCString();
+    document.cookie = "three=3; path=/; expires=" + date.toUTCString();
+
+
+
+    function toOjcCookie(stringCookie){
+      var cookiesRow = stringCookie.split('; '),
+          result={},
+          row=[];
+      if(Array.isArray(cookiesRow)){
+        cookiesRow.forEach(function(element){
+          row = element.split('=');
+          result[row[0]] = row[1];
+        });
+      }
+      return result
+    }
+
+    function htmlCookieOut(cookies){
+      var table = document.querySelector('table')
+      var objCookie = toOjcCookie(cookies)
+      console.log(objCookie);
+      var tableHtmlInner = '';
+
+      for (var prop in objCookie) {
+        if (!objCookie[prop]) {
+          tableHtmlInner = '<tr><td>Кук нет</td></tr>';
+        }else{
+        tableHtmlInner += '<tr><td>'+prop+'</td><td>'+objCookie[prop]+'</td><td><input class="del" name="'+prop+'" type="button"     value="Удалить"/></td></tr>';
+        }
+      }
+      table.innerHTML = tableHtmlInner;
+      
+    }
+    function setListenerHtmlColection(HtmlColection){
+       for(var i = 0; i < HtmlColection.length; i++){
+        HtmlColection[i].addEventListener('click', delCookie, false);
+      }
+    }
+
+    function delCookie(e){
+      var date = new Date(0);
+      document.cookie = e.target.name+'=; expires=Thu, 01-Jan-70 00:00:01 GMT;';
+      htmlCookieOut(document.cookie);
+      setListenerHtmlColection(document.getElementsByTagName('input'));
+    }
+
+    htmlCookieOut(document.cookie);
+    setListenerHtmlColection(document.getElementsByTagName('input'));
+
+
+	</script>
+</body>
+</html>
